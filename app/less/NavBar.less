@@ -1,0 +1,47 @@
+@headerHeight: 40px;
+#header{
+  -webkit-transition: opacity .5s;
+  transition: opacity .5s;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  height: @headerHeight;
+  margin-bottom: 24px;
+  padding: 0 4%;
+  width: 100%;
+}
+.login-area{
+  float: right;
+  margin-top: 4px;
+  a {
+    margin-left: 32px;
+  }
+}
+.clearfix {
+  zoom: 1;
+}
+#logo, #logo img {
+  height: @headerHeight;
+  line-height: @headerHeight;
+}
+#logo {
+  float: left;
+}
+#logo span {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: Raleway,Hiragino Sans GB,sans-serif;
+  height: @headerHeight;
+  line-height: @headerHeight;
+  text-transform: uppercase;
+}
+.no-border {
+  border: 0px;
+  &:focus{
+    outline: none;
+  }
+}
+.ant-dropdown-menu-item {
+  padding: 7px 30px 7px 7px;
+  font-size: 0.8rem;
+}
