@@ -41,8 +41,8 @@ class NewProject extends Component{
     this.props.dispatch(fetchUsers());
   }
   getMock(){
-    return this.props.users.map((user, index) => {
-      return {key: index, title: user.name, chosen: false};
+    return this.props.users.map(user => {
+      return {key: user.id, title: user.name, chosen: false};
     });
   }
   handleOk(e) {
@@ -75,11 +75,11 @@ class NewProject extends Component{
         console.log('errors in form');
         return;
       }
-      values.start = this.state.startValue;
-      values.end = this.state.endValue;
-      values.members = this.state.targetKeys.map(i => {
-        return {name: this.props.users[i].name, email: this.props.users[i].email};
-      });
+      values.start = this.state.startValue.getTime();
+      values.end = this.state.endValue.getTime();
+      console.log(this.props.users);
+      console.log(this.state.targetKeys);
+      values.members = this.state.targetKeys;
       dispatch(addProject(values));
     });
   }

@@ -1,7 +1,7 @@
 /*jslint node: true */
 /*jshint esversion: 6 */
 'use strict';
-require('babel-register');
+//require('babel-register');
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
@@ -23,28 +23,40 @@ app.get('/', (req, res) => {
 app.listen(app.get('port'), ()=> {
   console.log('Express server listening on port ' + app.get('port'));
 });
-//连接mongodb
-const mongoose = require('mongoose');
-const config = require('./config');
-mongoose.connect(config.database);
-mongoose.connection.on('error', () => {
-  console.info('Error: could not connect to MongoDB');
-});
 //各种请求处理
 const auth = require('./auth');
 const user = require('./user');
 const project = require('./project');
-app.post('/register', auth.register);
-app.post('/login', auth.login);
+const task = require('./task');
+app.post('/register', bodyValidate(['name','email','passwd']), auth.register);
+app.post('/login', bodyValidate(['name','passwd']), auth.login);
 //各种check处理
-app.get('/user/check', user.userCheck);
-app.get('/email/check', user.emailCheck);
-app.get('/project/check', project.check);
+app.get('/user/check', queryValidate(['name']), user.userCheck);
+app.get('/email/check', queryValidate(['email']), user.emailCheck);
+app.get('/project/check', queryValidate(['name']), project.check);
 //进行token验证
 app.use(auth.checkToken);
 //以下都是必须要带token的请求
 app.get('/token/check', auth.check);
-app.post('/project/add', project.add);
-app.post('/task/add', project.addTask);
-app.get('/project/list', project.list);
 app.get('/user/list', user.list);
+app.post('/project/add', bodyValidate(['name','start','end','intro', 'members']), project.add);
+app.get('/project/list', project.list);
+app.get('/project/member/list', queryValidate(['id']), project.memberList);
+app.post('/task/add', bodyValidate(['project_id','start','end','charge','intro']), task.add);
+app.post('/task/list', bodyValidate(['user_id', 'status']), task.add);
+
+function queryValidate(params){
+  return paramsVaildate('get', params);
+}
+function bodyValidate(params){
+  return paramsVaildate('post', params);
+}
+function paramsVaildate(method, params){
+  return (req, res, next) => {
+    console.dir(params);
+    console.dir(req.body);
+    const json = method === 'post' ? req.body : req.query;
+    const arr = params.filter(param => !json.hasOwnProperty(param));
+    arr.length > 0 ? res.json({errcode: 40002, errmsg: '不合法参数，请重新提交!'}) : next();
+  }
+}

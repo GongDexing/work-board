@@ -10,7 +10,7 @@ function auth(form, url, dispatch){
     if(result.errcode === 0){
       showAlert(dispatch, result.errmsg, true);
       putLocal('token', result.token);
-      dispatch(loginUser(Object.assign({}, result.user, {
+      dispatch(loginUser(Object.assign({}, form, {
         token: result.token
       })));
       delayHideModal(dispatch);
@@ -20,10 +20,10 @@ function auth(form, url, dispatch){
   });
 }
 function loginUser(user){
-    return {
-      type: 'LOGIN_USER',
-      user
-    };
+  return {
+    type: 'LOGIN_USER',
+    user
+  };
 }
 export function register(form){
   return dispatch => {
@@ -44,17 +44,18 @@ export function logout(){
 
 export function authCookie(){
   const token = getLocal('token');
-  if(token){
-    return dispatch =>
-    fetchGet('/token/check?token=' + token)
-    .then(result => {
-      if(result.errcode === 0){
-        dispatch(loginUser(Object.assign({}, result.user, {
-          token: token
-        })));
-      }else{
-        clearLocal();
-      }
-    });
+  return dispatch =>{
+    if(token){
+      fetchGet('/token/check?token=' + token)
+      .then(result => {
+        if(result.errcode === 0){
+          dispatch(loginUser(Object.assign({}, result.user, {
+            token: token
+          })));
+        }else{
+          clearLocal();
+        }
+      });
+    }
   }
 }

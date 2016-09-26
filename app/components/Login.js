@@ -3,7 +3,6 @@ import '../less/Login.less';
 import React, { Component } from 'react';
 import { Modal, Button, Form, Input, Checkbox } from 'antd';
 import AlertMsg from './AlertMsg';
-import { EmailRule, PasswdRule } from '../validate/rules';
 import { login } from '../actions/auth';
 const createForm = Form.create;
 const FormItem = Form.Item;
@@ -48,11 +47,11 @@ class Login extends Component{
       >
         <AlertMsg  alert={alert}/>
         <Form horizontal>
-          <FormItem {...formItemLayout} label='邮箱' required>
-            <Input  {...getFieldProps('email', EmailRule)} type='email'/>
+          <FormItem {...formItemLayout} label='姓名' required>
+            <Input  {...getFieldProps('name')} />
           </FormItem>
           <FormItem {...formItemLayout} label='密码' required>
-            <Input  {...getFieldProps('passwd', PasswdRule)} type='password'/>
+            <Input  {...getFieldProps('passwd')} type='password'/>
           </FormItem>
           <FormItem {...formItemLayout} label='记住密码'>
              <Checkbox />

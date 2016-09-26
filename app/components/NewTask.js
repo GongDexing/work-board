@@ -37,13 +37,14 @@ class NewTask extends Component{
     };
   }
   componentDidMount(){
-    if(this.props.projects.length > 0){
-      const project = this.props.projects[0];
+    this.props.dispatch(fetchProjects());
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.projects.length > 0){
+      const project = nextProps.projects[0];
       this.setState({
-        members: project.members,
         startDate:  new Date(project.start),
         endDate: new Date(project.end),
-        charge: '0'
       });
     }
   }
@@ -170,6 +171,7 @@ class NewTask extends Component{
     );
   }
   handleChange(value){
+    console.log('project', value);
     const project = this.props.projects[parseInt(value)];
     this.setState({
       members: project.members,

@@ -1,39 +1,37 @@
 /*jslint node: true */
 /*jshint esversion: 6 */
+'use strict';
 const jwt = require('jsonwebtoken');
-const User = require('./models/user');
 const secret = require('./config').secret;
+const DB = require('./db');
+const db = new DB();
 exports.register = (req, res) => {
-  if(req.body.name && req.body.email && req.body.passwd){
-    new User(req.body).save((err, user) => {
-      if(err){
-        res.json({errcode: 40004, errmsg: '注册失败，请稍后重试'});
-      }else{
-        console.log('user', user);
-        delete user.passwd;
-        res.json({errcode: 0, errmsg:'注册成功', user: user,
-          token: jwt.sign(user, secret, {expiresIn: "7 days"})});
-      }
-    });
-  }else{
-    res.json({errcode: 40002, errmsg: '不合法参数，请重新提交!'});
-  }
+  let user = req.body;
+  user.time = new Date().getTime();
+  db.save('tbl_user', user, (err, result) => {
+    if(err){
+      res.json({errcode: 40004, errmsg: '注册失败，请稍后重试'});
+    }else{
+      delete user.passwd;
+      delete user.time;
+      delete user.email;
+      user.id = result.insertId;
+      console.log('user', user);
+      res.json({errcode: 0, errmsg:'注册成功',
+        token: jwt.sign(user, secret, {expiresIn: "7 days"})});
+    }
+  });
 };
 exports.login = (req, res) => {
-  if(req.body.email && req.body.passwd){
-    User.findOne({email: req.body.email, passwd: req.body.passwd}, (err, user) => {
-      if(err || !user){
-        res.json({errcode: 40004, errmsg: '用户名或者密码错误，请稍后重试'});
-      }else{
-        console.log('user', user);
-        delete user.passwd;
-        res.json({errcode: 0, errmsg:'登录成功', user: user,
-          token: jwt.sign(user, secret, {expiresIn: "7 days"})});
-      }
-    });
-  }else{
-    res.json({errcode: 40002, errmsg: '不合法参数，请重新提交!'});
-  }
+  db.findOne('tbl_user', ['id', 'name'], req.body, (err, result) => {
+    if(err || result.length === 0){
+      res.json({errcode: 40004, errmsg: '用户名或者密码错误，请稍后重试'});
+    }else{
+      console.log('user', result[0]);
+      res.json({errcode: 0, errmsg:'登录成功',
+        token: jwt.sign(result[0], secret, {expiresIn: "7 days"})});
+    }
+  });
 };
 exports.checkToken = (req, res, next) => {
   const token = req.body.token || req.query.token;
@@ -42,8 +40,13 @@ exports.checkToken = (req, res, next) => {
       if(err){
         res.json({errcode: 40005, errmsg: '登录状态已经失效，请重新登录'});
       }else{
-        //console.log('decoded', decoded._doc);
-        req.user = decoded._doc;
+        console.log('decoded', decoded);
+        req.user = {
+          id: decoded.id,
+          name: decoded.name
+        };
+        if(req.body) delete req.body.token;
+        if(req.query) delete req.query.token;
         next();
       }
     });
@@ -52,8 +55,9 @@ exports.checkToken = (req, res, next) => {
   }
 };
 exports.check = (req, res, next) => {
-    if(req.user.name && req.user.email){
-      res.json({errcode: 0, user: req.user});
+    const user = req.user;
+    if(user.name && user.id){
+      res.json({errcode: 0, user: user});
     }else{
       res.json({errcode: 40005, errmsg: '登录状态已经失效，请重新登录'});
     }

@@ -57,7 +57,7 @@ function classifyTasks(projects){
 
 function mapStateToProps(state){
   const { modal, alert, btnStatus, auth, users, projects } = state;
-  const { doing, delay, done, discard } = classifyTasks(projects);
+  // const { doing, delay, done, discard } = classifyTasks(projects);
   return {
     modal,
     alert,
@@ -65,10 +65,10 @@ function mapStateToProps(state){
     auth,
     users,
     projects,
-    doing,
-    delay,
-    done,
-    discard
+    // doing,
+    // delay,
+    // done,
+    // discard
   };
 }
 export default connect(mapStateToProps)(App);

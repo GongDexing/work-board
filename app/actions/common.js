@@ -40,6 +40,7 @@ export function delayHideModal(dispatch, delay = 1000){
 }
 
 export function displayModal(dispatch, show){
+  console.log('show', show);
   dispatch(alertInfo('', false));
   dispatch(btnStatus(true));
   dispatch(showModal(show));

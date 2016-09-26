@@ -5,10 +5,10 @@ export function addProject(project){
   return (dispatch, getState) => {
     clearAlertAndDisableBtn(dispatch);
     project.token = getState().auth.token;
+    console.log(project);
     fetchPost('/project/add', project, dispatch)
     .then(result => {
       if(result.errcode === 0){
-        add(result.project);
         showAlert(dispatch, result.errmsg, true);
         delayHideModal(dispatch);
       }else{

@@ -17,11 +17,11 @@ export default class NavBar extends Component{
     this.register = this.register.bind(this);
     this.renderLoginArea = this.renderLoginArea.bind(this);
   }
-  componentWillReceiveProps(nextProps){
-    if(nextProps.auth !== this.props.auth && nextProps.auth.isLogin){
-      nextProps.dispatch(fetchProjects());
-    }
-  }
+  // componentWillReceiveProps(nextProps){
+  //   if(nextProps.auth !== this.props.auth && nextProps.auth.isLogin){
+  //     nextProps.dispatch(fetchProjects());
+  //   }
+  // }
   componentDidMount(){
     this.props.dispatch(authCookie());
   }
