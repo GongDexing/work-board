@@ -4,6 +4,7 @@ import { Modal, Button, Form, Input, DatePicker, Col, Select } from 'antd';
 import { TextareaRule } from '../validate/rules';
 import AlertMsg from './AlertMsg';
 import { fetchProjects } from '../actions/projects';
+import { fetchMembers } from '../actions/members';
 import { addTask } from '../actions/tasks';
 
 const createForm = Form.create;
@@ -40,20 +41,23 @@ class NewTask extends Component{
     this.props.dispatch(fetchProjects());
   }
   componentWillReceiveProps(nextProps){
-    if(nextProps.projects.length > 0){
+    if(nextProps.projects.length > 0 && nextProps.projects != this.props.projects){
       const project = nextProps.projects[0];
       this.setState({
         startDate:  new Date(project.start),
         endDate: new Date(project.end),
       });
     }
+    if(nextProps.members.length > 0 && nextProps.members != this.props.projects){
+      this.setState({
+        members: nextProps.members
+      })
+    }
   }
   handleOk(e) {
     e.preventDefault();
     const { dispatch } = this.props;
-    console.log('before validator charge', this.state.charge);
     this.props.form.validateFields((errs, values) => {
-      console.log('after validator charge', this.state.charge);
       let errFlag = false;
       if(!this.state.startValue){
         this.setState({
@@ -80,13 +84,10 @@ class NewTask extends Component{
         console.log('errors in form');
         return;
       }
-      const project = this.props.projects[parseInt(this.state.project)];
-      const member = project.members[parseInt(this.state.charge)];
-      values.start = this.state.startValue;
-      values.end = this.state.endValue;
-      values.project = project._id;
-      values.charge = { name: member.name, email: member.email };
-      //console.log(values);
+      values.start = this.state.startValue.getTime();
+      values.end = this.state.endValue.getTime();
+      values.project_id = this.props.projects[this.state.project].id;
+      values.charge = this.state.members[this.state.charge].id;
       dispatch(addTask(values));
     });
   }
@@ -117,7 +118,6 @@ class NewTask extends Component{
     return isDisable || endValue.getTime() < new Date().getTime();
   }
   onChange(field, value) {
-    console.log(field, 'change', value);
     this.setState({
       [field]: value,
     });
@@ -165,16 +165,14 @@ class NewTask extends Component{
     );
   }
   renderMembersOptions(){
-    console.log('members', this.state.members);
     return this.state.members.map((member, index)=>
       <Select.Option key={index} value={index + ''}>{member.name}</Select.Option>
     );
   }
   handleChange(value){
-    console.log('project', value);
     const project = this.props.projects[parseInt(value)];
+    this.props.dispatch(fetchMembers(project.id));
     this.setState({
-      members: project.members,
       startDate:  new Date(project.start),
       endDate: new Date(project.end),
       startValue: null,

@@ -24,6 +24,7 @@ exports.list = (req, res) => {
     if(err){
       res.json({errcode: 40006, errmsg: '获取用户列表失败'});
     }else{
+      console.log(users);
       res.json({errcode: 0, users: users});
     }
   });

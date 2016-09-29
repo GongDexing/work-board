@@ -6,58 +6,56 @@ import { Row, Col } from 'antd';
 import { WorkStatus } from '../constant/constant';
 import StatusCard from '../components/StatusCard';
 import NavBar from '../components/NavBar';
+import { fetchUsers } from '../actions/users';
+import { allTasks } from '../actions/tasks';
 class App extends Component{
   constructor(props){
     super(props);
   }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.auth !== this.props.auth &&  nextProps.auth.isLogin){
+      const { dispatch } = nextProps;
+      dispatch(fetchUsers());
+      dispatch(allTasks());
+    }
+  }
   render(){
-    const { dispatch, modal, alert, btnStatus, auth, users, doing, delay, done, discard, projects } = this.props;
+    const { dispatch, modal, alert, btnStatus, auth, users, projects, members, tasks } = this.props;
+    console.log('tasks', tasks);
     return (
       <Row>
-      <NavBar dispatch={dispatch} modal={modal} alert={alert} btnStatus={btnStatus} auth={auth} users={users} projects={projects}/>
+      <NavBar dispatch={dispatch} modal={modal} alert={alert} btnStatus={btnStatus} auth={auth} users={users} members={members} projects={projects}/>
       <Col span={6}>
-        <StatusCard  tasks={doing} status={WorkStatus[0]} />
+        <StatusCard dispatch={dispatch} tasks={tasks.doing} alert={alert} btnStatus={btnStatus}  status={WorkStatus[0]} />
       </Col>
       <Col span={6}>
-        <StatusCard  tasks={delay} status={WorkStatus[1]} />
+        <StatusCard dispatch={dispatch} tasks={tasks.delay} alert={alert} btnStatus={btnStatus} status={WorkStatus[1]} />
       </Col>
       <Col span={6}>
-        <StatusCard  tasks={done} status={WorkStatus[2]} />
+        <StatusCard dispatch={dispatch} tasks={tasks.done} alert={alert} btnStatus={btnStatus}  status={WorkStatus[2]} />
       </Col>
       <Col span={6}>
-        <StatusCard  tasks={discard} status={WorkStatus[3]} />
+        <StatusCard dispatch={dispatch} tasks={tasks.discard} alert={alert} btnStatus={btnStatus}  status={WorkStatus[3]} />
       </Col>
       </Row>
     );
   }
 }
-function classifyTasks(projects){
-  let doing = [];
-  let delay = [];
-  let done = [];
-  let discard = [];
-  projects.map(project =>
-    project.tasks.map(task => {
-      task.project  = project.name;
-      switch (task.status) {
-        case 0:
-          return doing.push(task);
-        case 1:
-          return delay.push(task);
-        case 2:
-          return done.push(task);
-        case 3:
-          return discard.push(task);
-      }
-    })
-  );
-  return { doing, delay, done, discard };
+function packageName(users, tasks){
+  console.log('users', users);
+  console.log('tasks', tasks);
+  let json = {};
+  for(let key in tasks){
+    json[key] = tasks[key].map(t => {
+       t.owner_name = users.filter(u => u.id === t.owner)[0].name;
+       t.charge_name = users.filter(u => u.id === t.charge)[0].name;
+      return t;
+    });
+  }
+  return json;
 }
-
-
 function mapStateToProps(state){
-  const { modal, alert, btnStatus, auth, users, projects } = state;
-  // const { doing, delay, done, discard } = classifyTasks(projects);
+  const { modal, alert, btnStatus, auth, users, projects, members, tasks } = state;
   return {
     modal,
     alert,
@@ -65,10 +63,8 @@ function mapStateToProps(state){
     auth,
     users,
     projects,
-    // doing,
-    // delay,
-    // done,
-    // discard
+    members,
+    tasks: packageName(users, tasks)
   };
 }
 export default connect(mapStateToProps)(App);

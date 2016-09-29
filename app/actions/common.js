@@ -7,7 +7,7 @@ export function fetchGet(url){
   return fetch(url).then(res => res.json());
 }
 
-export function fetchPost(url, form, dispatch){
+export function fetchPost(url, form){
   return fetch(url, {
           method: 'POST',
           headers: {

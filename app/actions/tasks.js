@@ -4,9 +4,8 @@ export function addTask(task){
   return (dispatch, getState) => {
     clearAlertAndDisableBtn(dispatch);
     task.token = getState().auth.token;
-    fetchPost('/task/add', task, dispatch)
+    fetchPost('/task/add', task)
     .then(result => {
-      console.log('result', result);
       if(result.errcode === 0){
         showAlert(dispatch, result.errmsg, true);
         delayHideModal(dispatch);
@@ -15,4 +14,36 @@ export function addTask(task){
       }
     });
   };
+}
+export function allTasks(){
+  return (dispatch, getState) => {
+    const { token } = getState().auth;
+    fetchGet('/init/tasks?token=' + token)
+    .then(result => {
+      if(result.errcode === 0){
+        dispatch(tasks(result.tasks));
+      }
+    });
+  }
+}
+export function update(form, hideModal){
+  return (dispatch, getState) => {
+    clearAlertAndDisableBtn(dispatch);
+    form.token = getState().auth.token;
+    fetchPost('/task/update', form)
+    .then(result => {
+      if(result.errcode === 0){
+        showAlert(dispatch, result.errmsg, true);
+        setTimeout(() => hideModal(), 1200);
+      }else{
+        showAlertAndEnableBtn(dispatch, result.errmsg, false);
+      }
+    });
+  };
+}
+function tasks(tasks){
+  return {
+    type: 'ALL_TASK',
+    tasks
+  }
 }

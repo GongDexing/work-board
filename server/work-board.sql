@@ -29,7 +29,11 @@ create table if not exists work_board.tbl_task(
   owner int not null comment '任务创建者的id',
   charge int not null comment '任务责任人的id',
   intro text not null comment '任务内容',
-  status tinyint not null default 0 comment '任务状态 0:正在进行, 1:完成, 2:延期, 3:废弃',
+  done_intro text comment '完成说明',
+  assign_intro text comment '指派说明',
+  delay_intro text comment '延期说明',
+  discard_intro text comment '废弃说明',
+  status tinyint  default 0 comment '任务状态 0:正在进行, 1:完成, 2:延期, 3:废弃',
   time bigint not null comment '操作时间, 以时间戳的形式保存'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -13,14 +13,14 @@ export default class StatusCard extends Component {
     super(props);
   }
   render(){
-    const { status, tasks } = this.props;
+    const { status, tasks, alert, btnStatus, dispatch } = this.props;
     style.background = status.color;
     return (
       <Card title={status.title} extra={<Filter />}
         style={style}>
         {
           tasks && tasks.length > 0 ?
-            tasks.map((t, index) => <Task key={index} task={t} />) : ''
+            tasks.map((t, index) => <Task dispatch={dispatch} key={index} task={t} alert={alert} btnStatus={btnStatus}/>) : ''
         }
       </Card>
     );

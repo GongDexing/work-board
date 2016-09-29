@@ -89,7 +89,7 @@ export default class NavBar extends Component{
     );
   }
   render(){
-    const { dispatch, modal, alert, btnStatus, users, projects} = this.props;
+    const { dispatch, modal, alert, btnStatus, users, projects, members} = this.props;
     return (
       <header id='header' className='clearfix'>
         <Row>

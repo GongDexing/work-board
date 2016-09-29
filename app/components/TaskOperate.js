@@ -8,12 +8,13 @@ export default class TaskOperate extends Component {
     super(props);
   }
   render(){
+    const { operate } = this.props;
     return (
       <div className='task-operate'>
-        <Button type="primary" size="small">完成</Button>
-        <Button size="small">延期</Button>
-        <Button size="small">指派</Button>
-        <Button size="small">废弃</Button>
+        <Button type="primary" size="small" onClick={() => operate('done')}>完成</Button>
+        <Button size="small" onClick={() => operate('delay')}>延期</Button>
+        <Button size="small" onClick={() => operate('assign')}>指派</Button>
+        <Button size="small" onClick={() => operate('discard')}>废弃</Button>
       </div>
     );
   }

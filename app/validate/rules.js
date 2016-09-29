@@ -97,9 +97,7 @@ export const DateRule = {
        required: true,
        type: 'date',
        message: '请选择一个日期？',
-     }, {
-       validator: checkDate,
-     },
+     }
    ],
 };
 

@@ -6,7 +6,7 @@ export function addProject(project){
     clearAlertAndDisableBtn(dispatch);
     project.token = getState().auth.token;
     console.log(project);
-    fetchPost('/project/add', project, dispatch)
+    fetchPost('/project/add', project)
     .then(result => {
       if(result.errcode === 0){
         showAlert(dispatch, result.errmsg, true);
@@ -22,7 +22,7 @@ export function fetchProjects(){
   return (dispatch, getState) => {
     fetchGet('/project/list?token=' + getState().auth.token)
     .then(result => {
-      console.log('result', result);
+      console.log('project result', result);
       if(result.errcode === 0){
         dispatch(projects(result.projects));
       }

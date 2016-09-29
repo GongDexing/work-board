@@ -6,12 +6,16 @@ import btnStatus from './btnStatus';
 import auth from './auth';
 import users from './users';
 import projects from './projects';
+import members from './members';
+import tasks from './tasks';
 const rootReducer = combineReducers({
   modal,
   alert,
   btnStatus,
   auth,
   users,
-  projects
+  projects,
+  members,
+  tasks
 });
 export default rootReducer;
