@@ -20,30 +20,27 @@ class App extends Component{
     }
   }
   render(){
-    const { dispatch, modal, alert, btnStatus, auth, users, projects, members, tasks } = this.props;
-    console.log('tasks', tasks);
+    const { dispatch, modal, alert, btnStatus, auth, users, projects, members, tasks, project } = this.props;
     return (
       <Row>
       <NavBar dispatch={dispatch} modal={modal} alert={alert} btnStatus={btnStatus} auth={auth} users={users} members={members} projects={projects}/>
       <Col span={6}>
-        <StatusCard dispatch={dispatch} tasks={tasks.doing} alert={alert} btnStatus={btnStatus}  status={WorkStatus[0]} />
+        <StatusCard users={users} members={members} project={project} dispatch={dispatch} tasks={tasks.doing} alert={alert} btnStatus={btnStatus}  status={WorkStatus[0]} />
       </Col>
       <Col span={6}>
-        <StatusCard dispatch={dispatch} tasks={tasks.delay} alert={alert} btnStatus={btnStatus} status={WorkStatus[1]} />
+        <StatusCard users={users} members={members} project={project} dispatch={dispatch} tasks={tasks.delay} alert={alert} btnStatus={btnStatus} status={WorkStatus[1]} />
       </Col>
       <Col span={6}>
-        <StatusCard dispatch={dispatch} tasks={tasks.done} alert={alert} btnStatus={btnStatus}  status={WorkStatus[2]} />
+        <StatusCard users={users} members={members} project={project} dispatch={dispatch} tasks={tasks.done} alert={alert} btnStatus={btnStatus}  status={WorkStatus[2]} />
       </Col>
       <Col span={6}>
-        <StatusCard dispatch={dispatch} tasks={tasks.discard} alert={alert} btnStatus={btnStatus}  status={WorkStatus[3]} />
+        <StatusCard users={users} members={members} project={project} dispatch={dispatch} tasks={tasks.discard} alert={alert} btnStatus={btnStatus}  status={WorkStatus[3]} />
       </Col>
       </Row>
     );
   }
 }
 function packageName(users, tasks){
-  console.log('users', users);
-  console.log('tasks', tasks);
   let json = {};
   for(let key in tasks){
     json[key] = tasks[key].map(t => {
@@ -55,7 +52,7 @@ function packageName(users, tasks){
   return json;
 }
 function mapStateToProps(state){
-  const { modal, alert, btnStatus, auth, users, projects, members, tasks } = state;
+  const { modal, alert, btnStatus, auth, users, projects, members, tasks, project } = state;
   return {
     modal,
     alert,
@@ -64,7 +61,8 @@ function mapStateToProps(state){
     users,
     projects,
     members,
-    tasks: packageName(users, tasks)
+    tasks: packageName(users, tasks),
+    project
   };
 }
 export default connect(mapStateToProps)(App);

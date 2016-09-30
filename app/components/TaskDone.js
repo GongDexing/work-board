@@ -23,7 +23,7 @@ class TaskDone extends Component{
       values.id = task.id;
       values.status = 2;
       dispatch(update(values, hide));
-    })
+    });
   }
   render(){
     const { alert, btnStatus, task, hide } = this.props;

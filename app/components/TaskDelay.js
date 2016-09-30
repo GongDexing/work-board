@@ -12,6 +12,7 @@ class TaskDone extends Component{
   constructor(props){
     super(props);
     this.handleOk = this.handleOk.bind(this);
+    this.disabledStartDate = this.disabledStartDate.bind(this);
   }
   handleOk(e) {
     e.preventDefault();
@@ -22,8 +23,13 @@ class TaskDone extends Component{
       }
       values.id = task.id;
       values.status = 1;
+      values.end = values.end.getTime();
       dispatch(update(values, hide));
-    })
+    });
+  }
+  disabledStartDate(startValue){
+    const { end } = this.props.task;
+    return startValue.getTime() <= end;
   }
   render(){
     const { alert, btnStatus, task, hide } = this.props;
@@ -51,10 +57,10 @@ class TaskDone extends Component{
             {task.project_name}
           </FormItem>
           <FormItem {...formItemLayout} label='延期至'>
-            <DatePicker {...getFieldProps('end', DateRule)}/>
+            <DatePicker {...getFieldProps('end', DateRule)} disabledDate={this.disabledStartDate}/>
           </FormItem>
           <FormItem {...formItemLayout} label='延期说明' required>
-            <Input {...getFieldProps('done_intro', TextareaRule)} type="textarea" rows={6}/>
+            <Input {...getFieldProps('delay_intro', TextareaRule)} type="textarea" rows={6}/>
           </FormItem>
         </Form>
       </Modal>

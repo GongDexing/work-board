@@ -10,6 +10,7 @@ conn.connect(err => {
   console.log('connected mysql as id ' + conn.threadId);
 });
 module.exports = function(){
+  this.conn = conn;
   this.query = (sql, callback) => {
     conn.query(sql, (err, result) => {
       callback(err, result);
@@ -58,6 +59,9 @@ module.exports = function(){
   };
   this.update = (table, json, condition, callback) => {
     //db.query(`update ${table} set `)
+    if(isEmpty(json) || isEmpty(condition)){
+      return callback(null, []);
+    }
     let sql = `update ${table}`;
     let setArr = [];
     for(let key in json){
@@ -71,4 +75,33 @@ module.exports = function(){
       callback(err, result);
     })
   };
+  this.delete = (table, condition, callback) => {
+    let conditionArr = [];
+    for(let key in condition){
+      conditionArr.push(`${key}=${conn.escape(condition[key])}`);
+    }
+    conn.query(`delete from ${table} where ${conditionArr.join(' and ')}`, (err, result) => {
+      callback(err, result);
+    });
+  };
+}
+
+function isEmpty(obj) {
+    // null and undefined are "empty"
+    if (obj == null) return true;
+    // Assume if it has a length property with a non-zero value
+    // that that property is correct.
+    if (obj.length > 0)    return false;
+    if (obj.length === 0)  return true;
+    // If it isn't an object at this point
+    // it is empty, but it can't be anything *but* empty
+    // Is it empty?  Depends on your application.
+    if (typeof obj !== "object") return true;
+    // Otherwise, does it have any properties of its own?
+    // Note that this doesn't handle
+    // toString and valueOf enumeration bugs in IE < 9
+    for (var key in obj) {
+        if (hasOwnProperty.call(obj, key)) return false;
+    }
+    return true;
 }

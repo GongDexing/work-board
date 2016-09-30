@@ -67,3 +67,82 @@ exports.memberList = (req, res) => {
     }
   })
 }
+exports.one = (req, res) => {
+  const project_id = req.query.id;
+  const sql = `select p.id as id,p.name as name,p.start as start,p.end as end,p.intro as intro
+                      from tbl_project p where p.id = ${project_id};
+               select pu.user_id as id from tbl_project_user pu where pu.project_id=${project_id}`;
+  db.query(sql, (err, result) => {
+      if(err){
+        console.log(err);
+        res.json({errcode: 40010, errmsg: '获取项目信息失败'});
+      }else{
+        let project = result[0][0];
+        project.members = result[1].map(i => i.id);
+        console.log('project', project);
+        res.json({errcode: 0, project: project});
+      }
+  });
+}
+exports.update = (req, res) => {
+  const conn = db.conn;
+  conn.beginTransaction((err) => {
+    let project = req.body;
+    console.log('update project', project);
+    const project_id = project.id;
+    const members = project.members;
+    delete project.id;
+    delete project.members;
+    db.update('tbl_project', project, {id: project_id}, (err, result) => {
+      if(err){
+        console.log('1 ', err);
+        return conn.rollback(() => {
+          res.json({errcode: 40010, errmsg: '项目修改失败1'});
+        });
+      }
+      console.log('enter delete members', members);
+      if(members && members.length > 0){
+        db.delete('tbl_project_user', {project_id: project_id}, (err, result) => {
+          if(err){
+            console.log('2 ', err);
+            return conn.rollback(() => {
+              res.json({errcode: 40010, errmsg: '项目修改失败2'});
+            });
+          }
+          console.log('enter add members', members);
+          const sql = 'insert into tbl_project_user(project_id, user_id) values ' +
+            members.map(m => `(${project_id}, ${m})`).join(',');
+          console.log(sql);
+          db.query(sql, (err, result) => {
+            if(err){
+              console.log('3 ', err);
+              return conn.rollback(() => {
+                res.json({errcode: 40010, errmsg: '项目修改失败3'});
+              });
+            }
+            conn.commit((err) => {
+              if(err){
+                console.log('4 ', err);
+                return conn.rollback(() => {
+                  res.json({errcode: 40010, errmsg: '项目修改失败4'});
+                });
+              }
+              res.json({errcode: 0, errmsg: '项目修改成功'});
+            });
+          });
+        })
+      }else{
+        conn.commit((err) => {
+          if(err){
+            console.log('4 ', err);
+            return conn.rollback(() => {
+              res.json({errcode: 40010, errmsg: '项目修改失败4'});
+            });
+          }
+          res.json({errcode: 0, errmsg: '项目修改成功'});
+        });
+      }
+    })
+  })
+
+}

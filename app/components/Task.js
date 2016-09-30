@@ -6,14 +6,20 @@ import TaskDone from './TaskDone';
 import TaskAssign from './TaskAssign';
 import TaskDiscard from './TaskDiscard';
 import TaskDelay from './TaskDelay';
+import Project from './Project';
 export default class Task extends Component {
   constructor(props){
     super(props);
     this.renderOperateModal = this.renderOperateModal.bind(this);
+    this.showProject = this.showProject.bind(this);
     this.hide = this.hide.bind(this);
     this.state = {
       show: ''
     };
+  }
+  showProject(e){
+    e.preventDefault();
+    this.setState({show: 'project'});
   }
   hide(){
     this.setState({show: ''});
@@ -29,23 +35,27 @@ export default class Task extends Component {
         return <TaskAssign {...this.props} hide={this.hide}/>;
       case 'discard':
         return <TaskDiscard {...this.props} hide={this.hide}/>;
+      case 'project':
+        return <Project {...this.props} hide={this.hide}/>
       default:
         return <p />;
     }
   }
   render(){
     const { task } = this.props;
+    const { status } = task;
     return(
       <div className='task'>
-        <div className='task-content'>
-          {task.intro}
-        </div>
+
         <div className='task-footer'>
-          <span><strong>{task.project_name}</strong></span>
+          <span><strong><a href='#' onClick={this.showProject}>{task.project_name}</a></strong></span>
           <span>{task.charge_name}</span>
           <span>{`${yyyyddmm(new Date(task.start))}至${yyyyddmm(new Date(task.end))}`}</span>
         </div>
-        <TaskOperate operate={show => this.setState({show})}/>
+        <div className='task-content'>
+          {task.intro}
+        </div>
+        {(status === 0 || status === 1) ? <TaskOperate operate={show => this.setState({show})}/> : <p/>}
         {this.renderOperateModal(this.state.show)}
       </div>
     );

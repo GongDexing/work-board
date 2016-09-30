@@ -5,6 +5,7 @@ module.exports ={
     user: 'root',
     password: '123456',
     database: 'work_board',
-    port: 3306
+    port: 3306,
+    multipleStatements: true
   }
 };

@@ -12,15 +12,28 @@ export default class StatusCard extends Component {
   constructor(props){
     super(props);
   }
+
   render(){
-    const { status, tasks, alert, btnStatus, dispatch } = this.props;
+    const { status, tasks } = this.props;
+    const projectNames = tasks.reduce((prev, next) => {
+      if(prev.indexOf(`${next.project_id}##${next.project_name}`) < 0){
+        prev.push(`${next.project_id}##${next.project_name}`);
+      }
+      return prev;
+    }, []);
+    const chargeNames = tasks.reduce((prev, next) => {
+      if(prev.indexOf(`${next.charge}##${next.charge_name}`) < 0){
+        prev.push(`${next.charge}##${next.charge_name}`);
+      }
+      return prev;
+    }, []);
     style.background = status.color;
     return (
-      <Card title={status.title} extra={<Filter />}
+      <Card title={status.title} extra={<Filter pNames={projectNames} cNames={chargeNames}/>}
         style={style}>
         {
           tasks && tasks.length > 0 ?
-            tasks.map((t, index) => <Task dispatch={dispatch} key={index} task={t} alert={alert} btnStatus={btnStatus}/>) : ''
+            tasks.map((t, index) => <Task key={index} task={t} {...this.props}/>) : ''
         }
       </Card>
     );

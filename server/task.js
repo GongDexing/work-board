@@ -49,8 +49,10 @@ exports.update = (req, res) => {
   const id = task.id;
   delete task.id;
   if(task.status && task.status === 2) task.end = new Date().getTime();
+  console.log(task);
   db.update('tbl_task', task, {id: id}, (err, result) => {
     if(err){
+      console.log(err);
       res.json({errcode: 40010, errmsg: '更新任务失败'});
     }else{
       res.json({errcode: 0, errmsg: '恭喜, 操作成功!'});

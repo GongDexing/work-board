@@ -23,7 +23,10 @@ export function clearAlertAndDisableBtn(dispatch){
   dispatch(btnStatus(false));
   dispatch(alertInfo('', false));
 }
-
+export function clearAlertAndenableBtn(dispatch){
+  dispatch(btnStatus(true));
+  dispatch(alertInfo('', false));
+}
 export function showAlertAndEnableBtn(dispatch, msg, isSuccess){
   dispatch(alertInfo(msg, isSuccess));
   dispatch(btnStatus(true));

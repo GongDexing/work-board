@@ -8,6 +8,7 @@ import users from './users';
 import projects from './projects';
 import members from './members';
 import tasks from './tasks';
+import project from './project';
 const rootReducer = combineReducers({
   modal,
   alert,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   users,
   projects,
   members,
-  tasks
+  tasks,
+  project
 });
 export default rootReducer;

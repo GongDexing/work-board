@@ -46,6 +46,8 @@ app.post('/task/add', bodyValidate(['project_id','start','end','charge','intro']
 app.post('/task/list', bodyValidate(['status']), task.list);
 app.get('/init/tasks', task.init);
 app.post('/task/update', bodyValidate(['id']), task.update);
+app.get('/project/one', queryValidate(['id']), project.one);
+app.post('/project/update', bodyValidate(['id']), project.update);
 
 function queryValidate(params){
   return paramsVaildate('get', params);
