@@ -5,6 +5,11 @@ export default function user(state = {}, action){
       return Object.assign({}, action.user, {
         isLogin: true
       });
+    case 'USER_INFO':
+      return Object.assign({}, state, {
+        email: action.user.email,
+        tel: action.user.tel
+      });
     case 'LOGIN_OUT':
       return {};
     default:

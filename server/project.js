@@ -95,7 +95,6 @@ exports.update = (req, res) => {
     delete project.members;
     db.update('tbl_project', project, {id: project_id}, (err, result) => {
       if(err){
-        console.log('1 ', err);
         return conn.rollback(() => {
           res.json({errcode: 40010, errmsg: '项目修改失败1'});
         });
@@ -104,7 +103,6 @@ exports.update = (req, res) => {
       if(members && members.length > 0){
         db.delete('tbl_project_user', {project_id: project_id}, (err, result) => {
           if(err){
-            console.log('2 ', err);
             return conn.rollback(() => {
               res.json({errcode: 40010, errmsg: '项目修改失败2'});
             });
@@ -112,17 +110,14 @@ exports.update = (req, res) => {
           console.log('enter add members', members);
           const sql = 'insert into tbl_project_user(project_id, user_id) values ' +
             members.map(m => `(${project_id}, ${m})`).join(',');
-          console.log(sql);
           db.query(sql, (err, result) => {
             if(err){
-              console.log('3 ', err);
               return conn.rollback(() => {
                 res.json({errcode: 40010, errmsg: '项目修改失败3'});
               });
             }
             conn.commit((err) => {
               if(err){
-                console.log('4 ', err);
                 return conn.rollback(() => {
                   res.json({errcode: 40010, errmsg: '项目修改失败4'});
                 });

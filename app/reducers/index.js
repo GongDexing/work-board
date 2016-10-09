@@ -9,6 +9,7 @@ import projects from './projects';
 import members from './members';
 import tasks from './tasks';
 import project from './project';
+import filter from './filter';
 const rootReducer = combineReducers({
   modal,
   alert,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   projects,
   members,
   tasks,
-  project
+  project,
+  filter
 });
 export default rootReducer;

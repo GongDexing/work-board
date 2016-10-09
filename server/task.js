@@ -2,16 +2,43 @@
 /*jshint esversion: 6 */
 'use strict';
 const DB = require('./db');
+const email = require('./email');
 const db = new DB();
+const yyyyddmm = (date) => {
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+}
 exports.add = (req, res) => {
   let task = req.body;
   task.owner = req.user.id;
   task.time = new Date().getTime();
+  console.log('task', task);
   db.save('tbl_task', task, (err, result) => {
     if(err){
       res.json({errcode: 40009, errmsg: '添加任务失败，请稍后重新添加'});
     }else{
       res.json({errcode: 0, errmsg: '添加任务成功'});
+      let json = {};
+      let to = [];
+      json.start = yyyyddmm(new Date(task.start));
+      json.end = yyyyddmm(new Date(task.end));
+      json.intro = task.intro;
+      const sql = `select u.email as email, u.name as charge from tbl_user u where u.id = ${task.charge};
+                    select u.email as email, u.name as owner from tbl_user u where u.id = ${task.owner};
+                    select p.name as project from tbl_project p where p.id=${task.project_id}`;
+      db.query(sql, (err, result) => {
+        if(!err && result.length === 3){
+          json.charge = result[0][0].charge;
+          json.owner = result[1][0].owner;
+          json.project = result[2][0].project;
+          to.push(result[0][0].email);
+          console.log('to', to);
+          console.log('json', json);
+          if(task.charge !== task.owner) to.push(result[1][0].email);
+          email.send(to, 'create', json, (err, info) => {
+            if(err) throw err;
+          })
+        }
+      })
     }
   });
 }

@@ -38,7 +38,7 @@ export function showAlert(dispatch, msg, isSuccess){
 
 export function delayHideModal(dispatch, delay = 1000){
   setTimeout(()=> {
-    dispatch(showModal(''));
+    displayModal(dispatch, '');
   }, delay);
 }
 

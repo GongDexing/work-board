@@ -94,9 +94,11 @@ export default class NavBar extends Component{
       <header id='header' className='clearfix'>
         <Row>
           <Col span={4}>
-            <a id='logo'>
+            <p id='logo'>
               <span>任务看板</span>
-            </a>
+              &nbsp;
+              <span><a href='http://communion.net.cn/'><img src={require('../img/logo.png')}/></a></span>
+            </p>
           </Col>
           <Col span={20}>
             {this.renderLoginArea()}

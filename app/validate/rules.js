@@ -41,6 +41,13 @@ const emailExists = (rule, value, callback) => {
     check('/email/check?email=' + value, callback);
   }
 };
+const phoneCheck = (rule, value, callback) => {
+  if (value.length === 0 || value.match(/^1[34578]\d{9}$/g)) {
+    callback();
+  } else {
+    callback(new Error('手机号格式不正确!'));
+  }
+};
 
 export const NameRule = {
   rules: [
@@ -70,14 +77,17 @@ export const EmailRuleWithCheck = {
     trigger: ['onBlur', 'onChange'],
   }],
 };
-
+export const PhoneRule = {
+  validate: [
+    {
+      rules: [
+        { validator: phoneCheck }
+      ],
+      trigger: 'onBlur',
+    }],
+};
 export const EmailRule = {
   validate: [{
-    rules: [
-      { required: true }
-    ],
-    trigger: 'onBlur',
-  }, {
     rules: [
       { type: 'email', message: '请输入正确的邮箱地址' },
     ],
@@ -88,6 +98,11 @@ export const EmailRule = {
 export const PasswdRule = {
   rules: [
     { required: true, min: 6, whitespace: true, message: '密码至少为 6 个字符' }
+  ],
+};
+export const NewPasswdRule = {
+  rules: [
+    { min: 6, whitespace: true, message: '密码至少为 6 个字符' }
   ],
 };
 

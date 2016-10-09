@@ -34,7 +34,11 @@ module.exports = {
       {
         test: /\.less$/,
         loaders: ['style', 'css', 'less']
-      }
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif|woff)$/,
+        loader: 'url?limit=8192'
+      },
     ]
   },
   plugins: [

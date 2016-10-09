@@ -42,20 +42,23 @@ export default class Task extends Component {
     }
   }
   render(){
-    const { task } = this.props;
+    const { task, userId } = this.props;
     const { status } = task;
+    const renderProject = (userId === task.project_owner) ?
+      <a onClick={this.showProject}>{task.project_name}</a> :
+      <span>{task.project_name}</span>;
     return(
       <div className='task'>
-
         <div className='task-footer'>
-          <span><strong><a href='#' onClick={this.showProject}>{task.project_name}</a></strong></span>
+          <span><strong>{renderProject}</strong></span>
           <span>{task.charge_name}</span>
           <span>{`${yyyyddmm(new Date(task.start))}至${yyyyddmm(new Date(task.end))}`}</span>
         </div>
         <div className='task-content'>
           {task.intro}
         </div>
-        {(status === 0 || status === 1) ? <TaskOperate operate={show => this.setState({show})}/> : <p/>}
+        {(status === 0 || status === 1) && (task.owner === userId || task.charge === userId) ?
+          <TaskOperate operate={show => this.setState({show})}/> : <p/>}
         {this.renderOperateModal(this.state.show)}
       </div>
     );

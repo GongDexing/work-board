@@ -16,7 +16,6 @@ exports.register = (req, res) => {
       delete user.time;
       delete user.email;
       user.id = result.insertId;
-      console.log('user', user);
       res.json({errcode: 0, errmsg:'注册成功',
         token: jwt.sign(user, secret, {expiresIn: "7 days"})});
     }
@@ -27,7 +26,6 @@ exports.login = (req, res) => {
     if(err || result.length === 0){
       res.json({errcode: 40004, errmsg: '用户名或者密码错误，请稍后重试'});
     }else{
-      console.log('user', result[0]);
       res.json({errcode: 0, errmsg:'登录成功',
         token: jwt.sign(result[0], secret, {expiresIn: "7 days"})});
     }

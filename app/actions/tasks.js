@@ -21,6 +21,7 @@ export function allTasks(){
     fetchGet('/init/tasks?token=' + token)
     .then(result => {
       if(result.errcode === 0){
+        console.log('fetch tasks', result.tasks);
         dispatch(tasks(result.tasks));
       }
     });

@@ -53,10 +53,6 @@ class Login extends Component{
           <FormItem {...formItemLayout} label='密码' required>
             <Input  {...getFieldProps('passwd')} type='password'/>
           </FormItem>
-          <FormItem {...formItemLayout} label='记住密码'>
-             <Checkbox />
-             <a href='#'><span className='forget-pwd'>忘记密码?</span></a>
-          </FormItem>
         </Form>
       </Modal>
     );

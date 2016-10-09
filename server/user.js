@@ -29,3 +29,24 @@ exports.list = (req, res) => {
     }
   });
 };
+exports.get = (req, res, next) => {
+  const id = req.user.id;
+  db.findOne('tbl_user', ['name', 'email', 'tel'], {id: id}, (err, result) => {
+    if(err || result.length === 0){
+      res.json({errcode: 400011, errmsg: '用户不存在!'});
+    }else{
+      res.json({errcode: 0, user: result[0]});
+    }
+  });
+}
+exports.update = (req, res, next) => {
+  const id = req.user.id;
+  console.log('update', req.body);
+  db.update('tbl_user', req.body, {id: id}, (err, result) => {
+    if(err || result.affectedRows !== 1){
+      res.json({errcode: 400012, errmsg: '用户消息设置失败!'});
+    }else{
+      res.json({errcode: 0, errmsg: '用户消息设置成功!'});
+    }
+  });
+}

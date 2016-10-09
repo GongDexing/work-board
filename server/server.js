@@ -38,6 +38,8 @@ app.get('/project/check', queryValidate(['name']), project.check);
 app.use(auth.checkToken);
 //以下都是必须要带token的请求
 app.get('/token/check', auth.check);
+app.get('/user/get', user.get);
+app.post('/user/update', user.update);
 app.get('/user/list', user.list);
 app.post('/project/add', bodyValidate(['name','start','end','intro', 'members']), project.add);
 app.get('/project/list', project.list);
