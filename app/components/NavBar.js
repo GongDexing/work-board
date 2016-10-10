@@ -6,6 +6,7 @@ import ModalGroup from './ModalGroup';
 import { logout, authCookie } from '../actions/auth';
 import { displayModal } from '../actions/common';
 import { fetchProjects } from '../actions/projects';
+import { resetFilter } from '../actions/filter';
 
 export default class NavBar extends Component{
   constructor(props){
@@ -17,11 +18,6 @@ export default class NavBar extends Component{
     this.register = this.register.bind(this);
     this.renderLoginArea = this.renderLoginArea.bind(this);
   }
-  // componentWillReceiveProps(nextProps){
-  //   if(nextProps.auth !== this.props.auth && nextProps.auth.isLogin){
-  //     nextProps.dispatch(fetchProjects());
-  //   }
-  // }
   componentDidMount(){
     this.props.dispatch(authCookie());
   }
@@ -47,7 +43,8 @@ export default class NavBar extends Component{
       case '3':
         return this.modal('task');
       case '1':
-        return dispatch(logout());
+        dispatch(resetFilter());
+        dispatch(logout());
     }
   }
   renderLoginArea(){

@@ -20,7 +20,7 @@ export default class Filter extends Component {
     return (
       <div>
         <Select defaultValue="project-all"
-          style={{ width: 200 }}
+          style={{ width: 220 }}
           showSearch={true}
           onChange={this.handleChange}
         >

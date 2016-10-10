@@ -14,7 +14,6 @@ exports.check = (req, res) => {
   });
 };
 exports.add = (req, res) => {
-  console.log('project', req.body);
   // res.json({errcode: 40007, errmsg: '添加项目失败，请稍后重新添加!'});
   let project = req.body;
   let members = project.members;
@@ -24,7 +23,6 @@ exports.add = (req, res) => {
     members.push(project.owner)
   }
   delete project.members;
-  console.log(project);
   db.save('tbl_project', project, (err, result) => {
     if(err){
       res.json({errcode: 40007, errmsg: '添加项目失败，请稍后重新添加!'});
@@ -32,7 +30,6 @@ exports.add = (req, res) => {
       const project_id = result.insertId;
       const sql = 'insert into tbl_project_user(project_id, user_id) values ' +
         members.map(m => `(${result.insertId}, ${m})`).join(',');
-      console.log(sql);
       db.query(sql, (err, result) => {
         if(err){
           res.json({errcode: 40007, errmsg: '添加项目失败，请稍后重新添加!'});
@@ -74,12 +71,10 @@ exports.one = (req, res) => {
                select pu.user_id as id from tbl_project_user pu where pu.project_id=${project_id}`;
   db.query(sql, (err, result) => {
       if(err){
-        console.log(err);
         res.json({errcode: 40010, errmsg: '获取项目信息失败'});
       }else{
         let project = result[0][0];
         project.members = result[1].map(i => i.id);
-        console.log('project', project);
         res.json({errcode: 0, project: project});
       }
   });
@@ -88,7 +83,6 @@ exports.update = (req, res) => {
   const conn = db.conn;
   conn.beginTransaction((err) => {
     let project = req.body;
-    console.log('update project', project);
     const project_id = project.id;
     const members = project.members;
     delete project.id;
@@ -99,7 +93,6 @@ exports.update = (req, res) => {
           res.json({errcode: 40010, errmsg: '项目修改失败1'});
         });
       }
-      console.log('enter delete members', members);
       if(members && members.length > 0){
         db.delete('tbl_project_user', {project_id: project_id}, (err, result) => {
           if(err){
@@ -107,7 +100,6 @@ exports.update = (req, res) => {
               res.json({errcode: 40010, errmsg: '项目修改失败2'});
             });
           }
-          console.log('enter add members', members);
           const sql = 'insert into tbl_project_user(project_id, user_id) values ' +
             members.map(m => `(${project_id}, ${m})`).join(',');
           db.query(sql, (err, result) => {
@@ -129,7 +121,6 @@ exports.update = (req, res) => {
       }else{
         conn.commit((err) => {
           if(err){
-            console.log('4 ', err);
             return conn.rollback(() => {
               res.json({errcode: 40010, errmsg: '项目修改失败4'});
             });

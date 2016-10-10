@@ -59,8 +59,6 @@ function bodyValidate(params){
 }
 function paramsVaildate(method, params){
   return (req, res, next) => {
-    console.dir(params);
-    console.dir(req.body);
     const json = method === 'post' ? req.body : req.query;
     const arr = params.filter(param => !json.hasOwnProperty(param));
     arr.length > 0 ? res.json({errcode: 40002, errmsg: '不合法参数，请重新提交!'}) : next();

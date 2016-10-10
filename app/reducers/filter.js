@@ -6,6 +6,8 @@ const initialState = {
 };
 export default function filter(state = initialState, action){
   switch (action.type) {
+    case 'ALL_FILTER': 
+      return initialState;
     case 'DOING_FILTER':
       return Object.assign({}, state, {
         doing: {

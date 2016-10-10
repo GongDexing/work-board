@@ -11,7 +11,9 @@ export default function user(state = {}, action){
         tel: action.user.tel
       });
     case 'LOGIN_OUT':
-      return {};
+      return Object.assign({}, state, {
+        isLogin: false
+      });
     default:
       return state;
   }

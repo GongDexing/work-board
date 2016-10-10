@@ -28,8 +28,11 @@ class TaskDone extends Component{
     });
   }
   disabledStartDate(startValue){
-    const { end } = this.props.task;
-    return startValue.getTime() <= end;
+    const { end, project_end } = this.props.task;
+    //console.log('end', new Date(end).getTime());
+    console.log('task', this.props.task);
+    return startValue.getTime() < new Date(end).getTime()
+          || startValue.getTime() > new Date(project_end).getTime();
   }
   render(){
     const { alert, btnStatus, task, hide } = this.props;

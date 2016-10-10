@@ -1,5 +1,5 @@
 /*jshint esversion:6*/
-import { fetchPost, fetchGet, clearAlertAndDisableBtn, showAlertAndEnableBtn, showAlert, delayHideModal} from './common';
+import { fetchPost, fetchGet, clearAlertAndenableBtn, clearAlertAndDisableBtn, showAlertAndEnableBtn, showAlert, delayHideModal} from './common';
 export function addTask(task){
   return (dispatch, getState) => {
     clearAlertAndDisableBtn(dispatch);
@@ -35,7 +35,10 @@ export function update(form, hideModal){
     .then(result => {
       if(result.errcode === 0){
         showAlert(dispatch, result.errmsg, true);
-        setTimeout(() => hideModal(), 1200);
+        setTimeout(() => {
+          clearAlertAndenableBtn(dispatch);
+          hideModal();
+        }, 1200);
       }else{
         showAlertAndEnableBtn(dispatch, result.errmsg, false);
       }

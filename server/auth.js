@@ -16,7 +16,7 @@ exports.register = (req, res) => {
       delete user.time;
       delete user.email;
       user.id = result.insertId;
-      res.json({errcode: 0, errmsg:'注册成功',
+      res.json({errcode: 0, errmsg:'注册成功', userId: user.id,
         token: jwt.sign(user, secret, {expiresIn: "7 days"})});
     }
   });
@@ -26,7 +26,7 @@ exports.login = (req, res) => {
     if(err || result.length === 0){
       res.json({errcode: 40004, errmsg: '用户名或者密码错误，请稍后重试'});
     }else{
-      res.json({errcode: 0, errmsg:'登录成功',
+      res.json({errcode: 0, errmsg:'登录成功', userId: result[0].id,
         token: jwt.sign(result[0], secret, {expiresIn: "7 days"})});
     }
   });
@@ -38,7 +38,6 @@ exports.checkToken = (req, res, next) => {
       if(err){
         res.json({errcode: 40005, errmsg: '登录状态已经失效，请重新登录'});
       }else{
-        console.log('decoded', decoded);
         req.user = {
           id: decoded.id,
           name: decoded.name

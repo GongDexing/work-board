@@ -11,6 +11,12 @@ export function setFilter(status, isCharge, filter){
   }
 }
 
+export function resetFilter(){
+  return {
+    type: 'ALL_FILTER'
+  };
+}
+
 function doingFilter(isCharge, filter){
   return {
     type: 'DOING_FILTER',

@@ -16,7 +16,8 @@ export default class StatusCard extends Component {
     };
   }
   componentWillReceiveProps(nextProps){
-    if(this.props.tasks.length === 0 && nextProps.tasks.length > 0){
+    if(this.state.projectNames.length === 0 && nextProps.tasks.length > 0){
+      console.log('nextProps.tasks', nextProps.tasks);
       const tasks = nextProps.tasks;
       const projectNames = tasks.reduce((prev, next) => {
         if(prev.indexOf(`${next.project_id}##${next.project_name}`) < 0){
@@ -30,6 +31,8 @@ export default class StatusCard extends Component {
         }
         return prev;
       }, []);
+      console.log('projectNames', projectNames);
+      console.log('chargeNames', chargeNames);
       this.setState({
         projectNames,
         chargeNames
@@ -38,6 +41,11 @@ export default class StatusCard extends Component {
   }
   render(){
     const { status, tasks, dispatch, userId } = this.props;
+    // console.log('StatusCard tasks', tasks);
+    // console.log('StatusCard userId', userId);
+    console.log('tasks', tasks);
+    console.log('projectNames', this.state.projectNames);
+    console.log('chargeNames', this.state.chargeNames);
     style.background = status.color;
     return (
       <Card title={status.title} extra={<Filter dispatch={dispatch} status={status.value}

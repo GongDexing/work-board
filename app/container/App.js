@@ -50,8 +50,6 @@ class App extends Component{
 }
 function packageName(users, tasks, filter){
   let json = {};
-  console.log('filter', filter);
-  console.log('tasks', tasks);
   for(let key in tasks){
     json[key] = tasks[key].map(t => {
        t.owner_name = users.filter(u => u.id === t.owner)[0].name;
@@ -70,6 +68,7 @@ function packageName(users, tasks, filter){
 }
 function mapStateToProps(state){
   const { modal, alert, btnStatus, auth, users, projects, members, tasks, project, filter } = state;
+  console.log('auth', auth);
   return {
     modal,
     alert,

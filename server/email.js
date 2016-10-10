@@ -22,19 +22,42 @@ const taskDetail = [
 const titleContent = {
   'create': {
     'subject': '创建任务',
-    'html': ['<br/>任务状态：<b style="background-color:#f3f31b;padding:2px;">进行中</b>', taskDetail].join('<br/>')
+    'html': [
+      '<br/>任务状态：<b style="background-color:#f3f31b;padding:2px;">进行中</b>',
+      taskDetail
+    ].join('<br/>')
   },
   'delay': {
     'subject': '延期任务',
-    'html':  ['<br/>任务状态：<b style="background-color:red;padding:2px;">延期</b>', taskDetail].join('<br/>')
+    'html':  [
+        '<br/>任务状态：<b style="background-color:red;padding:2px;">延期</b>',
+        '延期说明：<b style="background-color:red;padding:2px;"><%delay_intro%></b>',
+        taskDetail
+    ].join('<br/>')
   },
   'done': {
     'subject': '完成任务',
-    'html':  ['<br/>任务状态：<b style="background-color:#64ce64;padding:2px;">完成</b>', taskDetail].join('<br/>')
+    'html':  [
+      '<br/>任务状态：<b style="background-color:#64ce64;padding:2px;">完成</b>',
+      '完成说明：<b style="background-color:#64ce64;padding:2px;"><%done_intro%></b>',
+      taskDetail
+    ].join('<br/>')
   },
   'discard': {
     'subject': '废弃任务',
-    'html': ['<br/>任务状态：<b style="background-color:#e3dbdb;padding:2px;">废弃</b>',taskDetail].join('<br/>')
+    'html': [
+      '<br/>任务状态：<b style="background-color:#e3dbdb;padding:2px;">废弃</b>',
+      '废弃说明：<b style="background-color:#e3dbdb;padding:2px;"><%discard_intro%></b>',
+      taskDetail
+    ].join('<br/>')
+  },
+  'assign': {
+    'subject': '指派任务',
+    'html': [
+      '<br/>任务状态：<b style="background-color:#f3f31b;padding:2px;">进行中</b>',
+      '指派说明：<b style="background-color:#f3f31b;padding:2px;"><%assign_intro%></b>',
+      taskDetail
+    ].join('<br/>')
   }
 };
 exports.send = (to, type, json, callback) => {
@@ -42,7 +65,6 @@ exports.send = (to, type, json, callback) => {
   for(let key in json){
     tc.html = tc.html.replace(`<%${key}%>`, json[key]);
   }
-  console.log('html', tc.html);
   mailOption.html = tc.html;
   mailOption.subject = tc.subject;
   mailOption.to = to.join(',');

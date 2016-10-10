@@ -10,7 +10,8 @@ function auth(form, url, dispatch){
       showAlert(dispatch, result.errmsg, true);
       putLocal('token', result.token);
       dispatch(loginUser(Object.assign({}, form, {
-        token: result.token
+        token: result.token,
+        id: result.userId
       })));
       delayHideModal(dispatch);
     }else{
