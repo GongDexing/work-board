@@ -31,7 +31,7 @@ const titleContent = {
     'subject': '延期任务',
     'html':  [
         '<br/>任务状态：<b style="background-color:red;padding:2px;">延期</b>',
-        '延期说明：<b style="background-color:red;padding:2px;"><%delay_intro%></b>',
+        '延期说明：<b><%delay_intro%></b>',
         taskDetail
     ].join('<br/>')
   },
@@ -39,7 +39,7 @@ const titleContent = {
     'subject': '完成任务',
     'html':  [
       '<br/>任务状态：<b style="background-color:#64ce64;padding:2px;">完成</b>',
-      '完成说明：<b style="background-color:#64ce64;padding:2px;"><%done_intro%></b>',
+      '完成说明：<b><%done_intro%></b>',
       taskDetail
     ].join('<br/>')
   },
@@ -47,7 +47,7 @@ const titleContent = {
     'subject': '废弃任务',
     'html': [
       '<br/>任务状态：<b style="background-color:#e3dbdb;padding:2px;">废弃</b>',
-      '废弃说明：<b style="background-color:#e3dbdb;padding:2px;"><%discard_intro%></b>',
+      '废弃说明：<b><%discard_intro%></b>',
       taskDetail
     ].join('<br/>')
   },
@@ -55,7 +55,7 @@ const titleContent = {
     'subject': '指派任务',
     'html': [
       '<br/>任务状态：<b style="background-color:#f3f31b;padding:2px;">进行中</b>',
-      '指派说明：<b style="background-color:#f3f31b;padding:2px;"><%assign_intro%></b>',
+      '指派说明：<b><%assign_intro%></b>',
       taskDetail
     ].join('<br/>')
   }

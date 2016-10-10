@@ -23,12 +23,9 @@ class Project extends Component{
     this.onChange = this.onChange.bind(this);
     this.onStartChange = this.onStartChange.bind(this);
     this.onEndChange = this.onEndChange.bind(this);
-    this.handleStartToggle = this.handleStartToggle.bind(this);
-    this.handleEndToggle = this.handleEndToggle.bind(this);
     this.state = {
       startValue: null,
       endValue: null,
-      endOpen: false,
       mockData: [],
       targetKeys: [],
       membersError: '',
@@ -87,16 +84,22 @@ class Project extends Component{
     });
   }
   disabledStartDate(startValue) {
+    const { end } = this.props.project;
     let isDisable = false;
     if (this.state.endValue) {
       isDisable = isDisable || startValue.getTime() > this.state.endValue.getTime();
+    }else{
+      isDisable = isDisable || startValue.getTime() > end;
     }
     return isDisable || startValue.getTime() < new Date().getTime();
   }
   disabledEndDate(endValue) {
+    const { start } = this.props.project;
     let isDisable = false;
     if (this.state.startValue) {
       isDisable = isDisable || endValue.getTime() < this.state.startValue.getTime();
+    }else{
+      isDisable = isDisable || endValue.getTime() < start;
     }
     return isDisable || endValue.getTime() < new Date().getTime();
   }
@@ -133,14 +136,6 @@ class Project extends Component{
       });
     }
     this.onChange('endValue', value);
-  }
-  handleStartToggle({ open }) {
-    if (!open) {
-      this.setState({ endOpen: true });
-    }
-  }
-  handleEndToggle({ open }) {
-    this.setState({ endOpen: open });
   }
   handleChange(targetKeys) {
     const { project_owner } = this.props.task;
@@ -205,7 +200,6 @@ class Project extends Component{
                 value={this.state.endValue}
                 placeholder={yyyyddmm(new Date(project.end))}
                 onChange={this.onEndChange}
-                open={this.state.endOpen}
                 toggleOpen={this.handleEndToggle}
               />
             </Col>

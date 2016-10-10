@@ -44,18 +44,19 @@ export default class Task extends Component {
   render(){
     const { task, userId } = this.props;
     const { status } = task;
+    const overdue = (task.status === 0 || task.status === 1) && task.end < new Date().getTime();
     const renderProject = (userId === task.project_owner) ?
       <a onClick={this.showProject}>{task.project_name}</a> :
       <span>{task.project_name}</span>;
     return(
       <div className='task'>
+        <div className={ overdue ? 'task-overdue task-content ' : 'task-content'}>
+          {task.intro}
+        </div>
         <div className='task-footer'>
           <span><strong>{renderProject}</strong></span>
-          <span>{task.charge_name}</span>
+          <span><strong>{task.charge_name}</strong></span>
           <span>{`${yyyyddmm(new Date(task.start))}至${yyyyddmm(new Date(task.end))}`}</span>
-        </div>
-        <div className='task-content'>
-          {task.intro}
         </div>
         {(status === 0 || status === 1) && (task.owner === userId || task.charge === userId) ?
           <TaskOperate operate={show => this.setState({show})}/> : <p/>}

@@ -98,8 +98,8 @@ function sendEmail(task){
       json.owner = result[1][0].owner;
       json.project = result[2][0].project;
       to.push(result[0][0].email);
-      console.log('to', to);
-      console.log('json', json);
+      // console.log('to', to);
+      // console.log('json', json);
       if(task.charge !== task.owner) to.push(result[1][0].email);
       email.send(to, selectType(task.status), json, (err, info) => {
         if(err) throw err;
