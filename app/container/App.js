@@ -50,8 +50,14 @@ class App extends Component{
 }
 function packageName(users, tasks, filter){
   let json = {};
-  for(let key in tasks){
-    json[key] = tasks[key].map(t => {
+  const ts = {
+    doing: tasks.filter(t => t.status === 0),
+    delay: tasks.filter(t => t.status === 1),
+    done: tasks.filter(t => t.status === 2),
+    discard: tasks.filter(t => t.status === 3)
+  };
+  for(let key in ts){
+    json[key] = ts[key].map(t => {
        t.owner_name = users.filter(u => u.id === t.owner)[0].name;
        t.charge_name = users.filter(u => u.id === t.charge)[0].name;
       return t;

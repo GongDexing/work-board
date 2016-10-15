@@ -6,7 +6,7 @@ const transporter = nodemailer.createTransport({
   port: 465,
   auth: {
     user: 'project@communion.net.cn',
-    pass: 'Project2013'
+    pass: 'password'
   }
 });
 

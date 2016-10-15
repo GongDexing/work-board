@@ -1,10 +1,32 @@
 # 任务板
-简单、方便的任务管理应用，非常合适中小团队
-![](./img/任务看板.jpg)
-## 基本使用
+简单、灵活的任务管理应用，聚焦在任务管理，所有任务一目了然，非常合适中小团队
+![](./img/work-board.gif)
+
+## 运行
+> 安装mysql数据库
+
+> git clone git@github.com:GongDexing/work-board.git
+
+> cd work-board
+
+> mysql -uroot -p
+
+> source /path/to/project/work_board.sql
+
+> quit
+
+> npm install
+
+> webpack
+
+> 修改email.js邮箱配置
+
+> npm start
+
+## 使用
 ### 注册
 如果人不多的话，可以由管理员统一进行注册，然后个人根据自己设置密码即可
-> 姓名: 员工的中文名称
+> 姓名: 员工的姓名(可以是中文)
 
 > 邮箱：填写工作邮箱
 

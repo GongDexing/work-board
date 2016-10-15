@@ -1,20 +1,24 @@
 /*jshint esversion:6*/
 import '../less/Task.less';
 import React, { Component } from 'react';
+import { Icon } from 'antd';
 import TaskOperate from './TaskOperate';
 import TaskDone from './TaskDone';
 import TaskAssign from './TaskAssign';
 import TaskDiscard from './TaskDiscard';
 import TaskDelay from './TaskDelay';
 import Project from './Project';
+const collapseLimit = 50;
 export default class Task extends Component {
   constructor(props){
     super(props);
     this.renderOperateModal = this.renderOperateModal.bind(this);
     this.showProject = this.showProject.bind(this);
     this.hide = this.hide.bind(this);
+    this.renderIntro = this.renderIntro.bind(this);
     this.state = {
-      show: ''
+      show: '',
+      isCollapse: true
     };
   }
   showProject(e){
@@ -41,6 +45,21 @@ export default class Task extends Component {
         return <p />;
     }
   }
+  renderIntro(){
+    const { intro } = this.props.task;
+    const { isCollapse } = this.state;
+    if(intro.length > collapseLimit && isCollapse){
+      return <span>{`${intro.substring(0, collapseLimit)}...`}
+                <span className='collapse-operate' onClick={()=> this.setState({isCollapse: !isCollapse})}> 展开</span>
+             </span>;
+    }else if(intro.length > collapseLimit && !isCollapse){
+      return <span>{`${intro}`}
+                <span className='collapse-operate' onClick={()=> this.setState({isCollapse: !isCollapse})}> 收起</span>
+             </span>;
+    }else{
+      return <span>{intro}</span>;
+    }
+  }
   render(){
     const { task, userId } = this.props;
     const { status } = task;
@@ -48,18 +67,19 @@ export default class Task extends Component {
     const renderProject = (userId === task.project_owner) ?
       <a onClick={this.showProject}>{task.project_name}</a> :
       <span>{task.project_name}</span>;
+    const hasRight = (status === 0 || status === 1) && (task.owner === userId || task.charge === userId);
+    console.log('task intro length', task.intro.length);
     return(
       <div className='task'>
-        <div className={ overdue ? 'task-overdue task-content ' : 'task-content'}>
-          {task.intro}
-        </div>
         <div className='task-footer'>
           <span><strong>{renderProject}</strong></span>
           <span><strong>{task.charge_name}</strong></span>
           <span>{`${yyyyddmm(new Date(task.start))}至${yyyyddmm(new Date(task.end))}`}</span>
         </div>
-        {(status === 0 || status === 1) && (task.owner === userId || task.charge === userId) ?
-          <TaskOperate operate={show => this.setState({show})}/> : <p/>}
+        <div className={ overdue ? 'task-overdue task-content ' : 'task-content'}>
+          {this.renderIntro()}
+        </div>
+        { hasRight ? <TaskOperate operate={show => this.setState({show})}/> : <p/>}
         {this.renderOperateModal(this.state.show)}
       </div>
     );

@@ -118,7 +118,7 @@ export const DateRule = {
 
 export const TextareaRule = {
   rules: [
-    { required: true, message: '真的不打算写点什么吗？', max: 200 },
+    { required: true, message: '真的不打算写点什么吗？'},
   ],
 };
 

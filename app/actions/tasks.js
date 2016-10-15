@@ -8,6 +8,7 @@ export function addTask(task){
     .then(result => {
       if(result.errcode === 0){
         showAlert(dispatch, result.errmsg, true);
+        dispatch(allTasks());
         delayHideModal(dispatch);
       }else{
         showAlertAndEnableBtn(dispatch, result.errmsg, false);
@@ -29,12 +30,14 @@ export function allTasks(){
 }
 export function update(form, hideModal){
   return (dispatch, getState) => {
+    console.log('update task', form);
     clearAlertAndDisableBtn(dispatch);
     form.token = getState().auth.token;
     fetchPost('/task/update', form)
     .then(result => {
       if(result.errcode === 0){
         showAlert(dispatch, result.errmsg, true);
+        dispatch(updateStatus(form.id, form.status));
         setTimeout(() => {
           clearAlertAndenableBtn(dispatch);
           hideModal();
@@ -43,6 +46,14 @@ export function update(form, hideModal){
         showAlertAndEnableBtn(dispatch, result.errmsg, false);
       }
     });
+  };
+}
+function updateStatus(id, status){
+  console.log(`${id}--${status}`);
+  return {
+    type: 'UPDATE_STATUS',
+    id,
+    status
   };
 }
 function tasks(tasks){

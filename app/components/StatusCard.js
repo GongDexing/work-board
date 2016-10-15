@@ -31,8 +31,6 @@ export default class StatusCard extends Component {
         }
         return prev;
       }, []);
-      console.log('projectNames', projectNames);
-      console.log('chargeNames', chargeNames);
       this.setState({
         projectNames,
         chargeNames
@@ -41,11 +39,6 @@ export default class StatusCard extends Component {
   }
   render(){
     const { status, tasks, dispatch, userId } = this.props;
-    // console.log('StatusCard tasks', tasks);
-    // console.log('StatusCard userId', userId);
-    console.log('tasks', tasks);
-    console.log('projectNames', this.state.projectNames);
-    console.log('chargeNames', this.state.chargeNames);
     style.background = status.color;
     return (
       <Card title={status.title} extra={<Filter dispatch={dispatch} status={status.value}
