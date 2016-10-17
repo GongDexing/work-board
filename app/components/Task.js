@@ -49,15 +49,15 @@ export default class Task extends Component {
     const { intro } = this.props.task;
     const { isCollapse } = this.state;
     if(intro.length > collapseLimit && isCollapse){
-      return <span>{`${intro.substring(0, collapseLimit)}...`}
+      return <pre className='task-intro'>{`${intro.substring(0, collapseLimit)}...`}
                 <span className='collapse-operate' onClick={()=> this.setState({isCollapse: !isCollapse})}> 展开</span>
-             </span>;
+             </pre>;
     }else if(intro.length > collapseLimit && !isCollapse){
-      return <span>{`${intro}`}
+      return <pre className='task-intro'>{`${intro}`}
                 <span className='collapse-operate' onClick={()=> this.setState({isCollapse: !isCollapse})}> 收起</span>
-             </span>;
+             </pre>;
     }else{
-      return <span>{intro}</span>;
+      return <pre className='task-intro'>{intro}</pre>;
     }
   }
   render(){
