@@ -1,5 +1,6 @@
 /*jshint esversion:6*/
 import { fetchPost, fetchGet, clearAlertAndenableBtn, clearAlertAndDisableBtn, showAlertAndEnableBtn, showAlert, delayHideModal} from './common';
+import { resetFilter } from './filter';
 export function addTask(task){
   return (dispatch, getState) => {
     clearAlertAndDisableBtn(dispatch);
@@ -37,10 +38,17 @@ export function update(form, hideModal){
     .then(result => {
       if(result.errcode === 0){
         showAlert(dispatch, result.errmsg, true);
-        dispatch(updateStatus(form.id, form.status));
+        if(form.charge){
+          dispatch(updateCharge(form.id, form.charge));
+        }else{
+          dispatch(updateStatus(form.id, form.status));
+        }
+        console.log('form', form);
         setTimeout(() => {
           clearAlertAndenableBtn(dispatch);
-          hideModal();
+          if(typeof hideModal == 'function'){
+            hideModal();
+          }
         }, 1200);
       }else{
         showAlertAndEnableBtn(dispatch, result.errmsg, false);
@@ -54,6 +62,14 @@ function updateStatus(id, status){
     type: 'UPDATE_STATUS',
     id,
     status
+  };
+}
+function updateCharge(id, charge){
+  console.log(`${id}--${charge}`);
+  return {
+    type: 'UPDATE_CHARGE',
+    id,
+    charge
   };
 }
 function tasks(tasks){

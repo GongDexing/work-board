@@ -27,6 +27,7 @@ class TaskAssign extends Component{
       }
       values.charge = parseInt(values.charge);
       values.id = task.id;
+      values.status = task.status;
       dispatch(update(values, hide));
     });
   }

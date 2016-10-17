@@ -10,6 +10,13 @@ export default function tasks(state = initialState, action){
         }
         return t;
       });
+    case 'UPDATE_CHARGE':
+      return state.map( t => {
+        if(t.id === action.id){
+          t.charge = action.charge;
+        }
+        return t;
+      });
     default:
       return state;
   }

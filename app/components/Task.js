@@ -68,7 +68,6 @@ export default class Task extends Component {
       <a onClick={this.showProject}>{task.project_name}</a> :
       <span>{task.project_name}</span>;
     const hasRight = (status === 0 || status === 1) && (task.owner === userId || task.charge === userId);
-    console.log('task intro length', task.intro.length);
     return(
       <div className='task'>
         <div className='task-footer'>
