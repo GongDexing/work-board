@@ -7,7 +7,8 @@
     "dev": "webpack-dev-server --progress --profile --colors --hot --host 0.0.0.0 ",
     "build": "webpack --progress --profile --colors",
     "test": "mocha start",
-    "start": "nodemon ./server/server.js"
+    "start": "nodemon ./server/server.js",
+    "production": "node server/server.js NODE_ENV === 'production'"
   },
   "author": "",
   "license": "MIT",
@@ -35,8 +36,6 @@
     "body-parser": "^1.14.1",
     "express": "^4.14.0",
     "jsonwebtoken": "^7.1.9",
-    "moment": "^2.15.1",
-    "moment-timezone": "^0.5.5",
     "morgan": "^1.6.1",
     "mysql": "^2.11.1",
     "nodemailer": "^2.6.4",

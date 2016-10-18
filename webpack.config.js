@@ -14,7 +14,7 @@ module.exports = {
     path: BUILD_PATH,
     filename: 'bundle.js'
   },
-  devtool: 'eval-source-map',
+  // devtool: 'eval-source-map',
   devServer: {
     historyApiFallback: true,
     hot: true,
@@ -45,6 +45,14 @@ module.exports = {
     new HtmlwebpackPlugin({
       title: '任务看板',
       template: 'template.ejs'
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      output: {
+        comments: false,
+      },
+      compress: {
+        warnings: false
+      }
     })
   ]
 };
