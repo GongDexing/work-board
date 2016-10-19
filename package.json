@@ -8,12 +8,14 @@
     "build": "webpack --progress --profile --colors",
     "test": "mocha start",
     "start": "nodemon ./server/server.js",
-    "production": "node server/server.js NODE_ENV === 'production'"
+    "production": "node ./server/server.js NODE_ENV='\"production\"'",
+    "build-production": "webpack -p --config webpack.production.config.js --progress --profile --colors"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "babel-loader": "^6.2.5",
+    "babel-plugin-antd": "^0.5.1",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-react": "^6.11.1",
     "babel-register": "^6.3.13",

@@ -14,13 +14,6 @@ module.exports = {
     path: BUILD_PATH,
     filename: 'bundle.js'
   },
-  devtool: 'eval-source-map',
-  devServer: {
-    historyApiFallback: true,
-    hot: true,
-    inline: true,
-    progress: true
-  },
   module: {
     loaders: [
       {
@@ -28,7 +21,8 @@ module.exports = {
         loader: 'babel',
         include: APP_PATH,
         query: {
-          presets: ['es2015', 'react']
+          presets: ['es2015', 'react'],
+          plugins: [["antd", { "style": true }]]
         }
       },
       {
@@ -46,10 +40,18 @@ module.exports = {
       title: '任务看板',
       template: 'template.ejs'
     }),
-    new webpack.DefinePlugin({
-      'process.env':{
-        'NODE_ENV': JSON.stringify('development')
+    new webpack.optimize.UglifyJsPlugin({
+      output: {
+        comments: false,
+      },
+      compress: {
+        warnings: false
       }
     }),
+    new webpack.DefinePlugin({
+      'process.env':{
+        'NODE_ENV': JSON.stringify('production')
+      }
+    })
   ]
 };
