@@ -2,4 +2,3 @@
 npm-debug*
 test*
 ./server/config.js
-/build
