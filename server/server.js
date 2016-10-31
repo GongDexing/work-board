@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const swig = require('swig');
 
-app.set('port', process.env.PORT || 7777);
+app.set('port', process.env.PORT || 3000);
 //app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
