@@ -1,9 +1,9 @@
 module.exports ={
   secret: 'work-board-secret',
   database: {
-    host: '127.0.0.1',
+    host: '192.168.1.243',
     user: 'root',
-    password: '123456',
+    password: 'Bjjyhc@2013',
     database: 'work_board',
     port: 3306,
     multipleStatements: true

@@ -15,6 +15,7 @@ export default class TaskOperate extends Component {
         <Button size="small" onClick={() => operate('delay')}>延期</Button>
         <Button size="small" onClick={() => operate('assign')}>指派</Button>
         <Button size="small" onClick={() => operate('discard')}>废弃</Button>
+        <Button size="small" onClick={() => operate('edit')}>变更</Button>
       </div>
     );
   }
