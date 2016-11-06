@@ -9,6 +9,7 @@ import StatusCard from '../components/StatusCard';
 import NavBar from '../components/NavBar';
 import { fetchUsers } from '../actions/users';
 import { allTasks } from '../actions/tasks';
+import { getTasks, getSelect } from '../selectors';
 class App extends Component{
   constructor(props){
     super(props);
@@ -48,49 +49,49 @@ class App extends Component{
     );
   }
 }
-let oldTs = {doing: [], delay: [], done: [], discard: []};
-function packageName(users, tasks, filter){
-  let json = {};
-  let select = {doing: {}, delay: {}, done: {}, discard: {}};
-  const ts = {
-    doing: tasks.filter(t => t.status === 0),
-    delay: tasks.filter(t => t.status === 1),
-    done: tasks.filter(t => t.status === 2),
-    discard: tasks.filter(t => t.status === 3)
-  };
-  for(let key in ts){
-    json[key] = ts[key].map(t => {
-       t.owner_name = users.filter(u => u.id === t.owner)[0].name;
-       t.charge_name = users.filter(u => u.id === t.charge)[0].name;
-      return t;
-    });
-    select[key].projectNames = json[key].reduce((prev, next) => {
-      if(prev.indexOf(`${next.project_id}##${next.project_name}`) < 0){
-        prev.push(`${next.project_id}##${next.project_name}`);
-      }
-      return prev;
-    }, []);
-    select[key].chargeNames = json[key].reduce((prev, next) => {
-      if(prev.indexOf(`${next.charge}##${next.charge_name}`) < 0){
-        prev.push(`${next.charge}##${next.charge_name}`);
-      }
-      return prev;
-    }, []);
-    if(filter[key].filter !== 'all'){
-      json[key] = json[key].filter(t => {
-        return filter[key].isCharge ?
-          t.charge === parseInt(filter[key].filter) :
-          t.project_id === parseInt(filter[key].filter);
-      });
-    }
-  }
-  oldTs = ts;
-  return { json, select };
-}
-let oldTasks;
+// let oldTs = {doing: [], delay: [], done: [], discard: []};
+// function packageName(users, tasks, filter){
+//   let json = {};
+//   let select = {doing: {}, delay: {}, done: {}, discard: {}};
+//   const ts = {
+//     doing: tasks.filter(t => t.status === 0),
+//     delay: tasks.filter(t => t.status === 1),
+//     done: tasks.filter(t => t.status === 2),
+//     discard: tasks.filter(t => t.status === 3)
+//   };
+//   for(const key in ts){
+//     json[key] = ts[key].map(t => {
+//        t.owner_name = users.filter(u => u.id === t.owner)[0].name;
+//        t.charge_name = users.filter(u => u.id === t.charge)[0].name;
+//       return t;
+//     });
+//     select[key].projectNames = json[key].reduce((prev, next) => {
+//       if(prev.indexOf(`${next.project_id}##${next.project_name}`) < 0){
+//         prev.push(`${next.project_id}##${next.project_name}`);
+//       }
+//       return prev;
+//     }, []);
+//     select[key].chargeNames = json[key].reduce((prev, next) => {
+//       if(prev.indexOf(`${next.charge}##${next.charge_name}`) < 0){
+//         prev.push(`${next.charge}##${next.charge_name}`);
+//       }
+//       return prev;
+//     }, []);
+//     if(filter[key].filter !== 'all'){
+//       json[key] = json[key].filter(t => {
+//         return filter[key].isCharge ?
+//           t.charge === parseInt(filter[key].filter) :
+//           t.project_id === parseInt(filter[key].filter);
+//       });
+//     }
+//   }
+//   oldTs = ts;
+//   return { json, select };
+// }
+// let oldTasks;
 function mapStateToProps(state){
   const { modal, alert, btnStatus, auth, users, projects, members, tasks, project, filter } = state;
-  const { json, select } = packageName(users, tasks, filter);
+  //const { json, select } = packageName(users, tasks, filter);
   return {
     modal,
     alert,
@@ -99,9 +100,9 @@ function mapStateToProps(state){
     users,
     projects,
     members,
-    tasks: json,
+    tasks: getTasks(state),
     project,
-    select
+    select: getSelect(state)
   };
 }
 export default connect(mapStateToProps)(App);
